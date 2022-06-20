@@ -31,7 +31,7 @@ const getTextOverflow = node => node.style?.textOverflow;
  * @param {Object} node
  * @returns {Object} layout container
  */
-const getContainer = (width, height, node) => {
+const getContainer = (width, height, node, excludeRects) => {
   const maxLines = getMaxLines(node);
   const textOverflow = getTextOverflow(node);
 
@@ -40,6 +40,7 @@ const getContainer = (width, height, node) => {
     y: 0,
     width,
     maxLines,
+    excludeRects,
     height: height || Infinity,
     truncateMode: textOverflow,
   };
@@ -69,9 +70,9 @@ const getLayoutOptions = (fontStore, node) => ({
  * @param {Number} fontStore font store
  * @returns {Array} layout lines
  */
-const layoutText = (node, width, height, fontStore) => {
+const layoutText = (node, width, height, fontStore, excludeRects) => {
   const attributedString = getAttributedString(fontStore, node);
-  const container = getContainer(width, height, node);
+  const container = getContainer(width, height, node, excludeRects);
   const options = getLayoutOptions(fontStore, node);
   const lines = engine(attributedString, container, options);
 
